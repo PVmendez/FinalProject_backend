@@ -10,7 +10,6 @@ import userRouter from "./routes/userRoutes";
 const dbUser = process.env.MONGO_DB_USER;
 const dbPassword = process.env.MONGO_DB_PASSWORD;
 const uri = `mongodb+srv://${dbUser}:${dbPassword}@secradardb.f9xsna0.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri);
 app.use("/", userRouter);
 
 //Database Connection
