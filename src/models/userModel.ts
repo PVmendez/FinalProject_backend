@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-// Definir el esquema del usuario
+// Define the user schema
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Crear el modelo "User"
+// Create "User" model
 const User = mongoose.model('User', userSchema);
 
 export default User;

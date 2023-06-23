@@ -1,21 +1,21 @@
-import User from '../models/userModel'; // Importar el modelo de usuario
+import User from '../models/userModel';
 
-// Controlador para la solicitud GET
+// Handler for GET request
 const getUser = (req, res) => {
-  const userId = req.params.id; // Obtener el ID del usuario desde los parámetros de la solicitud
+  const userId = req.params.id; // Get the user ID from the request parameters
 
-  // Buscar el usuario por su ID en la base de datos
+  // Search the user by their ID in the database
   User.findById(userId, (err, user) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Error al obtener el usuario de la base de datos' });
+      return res.status(500).json({ error: 'Error getting user from database' });
     }
 
     if (!user) {
-      return res.status(404).json({ error: 'Usuario no encontrado' });
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    // Usuario encontrado, enviarlo en la respuesta
+    // User found, send it in reply
     res.json(user);
   });
 };
