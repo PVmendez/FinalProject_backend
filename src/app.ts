@@ -1,19 +1,27 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { MongoClient, ServerApiVersion } from "mongodb";
+//import { MongoClient, ServerApiVersion } from "mongodb";
+//import mongoose from 'mongoose';
+import Routes from "./routes/indexRoutes"
+import dbInitialSetup from "../dbIntialSetup";
 require("dotenv").config();
 
-const PORT = 3000;
-const app = express();
-import userRouter from "./routes/userRoutes";
 const dbUser = process.env.MONGO_DB_USER;
 const dbPassword = process.env.MONGO_DB_PASSWORD;
 const uri = `mongodb+srv://${dbUser}:${dbPassword}@secradardb.f9xsna0.mongodb.net/?retryWrites=true&w=majority`;
-app.use("/", userRouter);
+const PORT = 3000;
+const app = express();
+
+// Middlewares 
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //Database Connection
-const client = new MongoClient(uri, {
+dbInitialSetup(uri);
+
+/*const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -31,17 +39,10 @@ async function run() {
     await client.close();
   }
 }
-run().catch(console.dir);
+run().catch(console.dir);*/
 
-// Middlewares
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Paths
-app.get("/", (req, res) => {
-  res.send("¡Is running!");
-});
+//Paths
+Routes(app);
 
 // Port
 app.listen(PORT, () => {
