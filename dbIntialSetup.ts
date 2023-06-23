@@ -9,4 +9,4 @@ const dbInitialSetup = async (uri: string) => {
     .on("error", (error) => console.log(error));
 };
 
-export default dbInitialSetup;
+export default dbInitialSetup; 

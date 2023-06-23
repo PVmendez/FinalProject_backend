@@ -10,11 +10,10 @@ require("dotenv").config();
 const dbUser = process.env.MONGO_DB_USER;
 const dbPassword = process.env.MONGO_DB_PASSWORD;
 const uri = `mongodb+srv://${dbUser}:${dbPassword}@secradardb.f9xsna0.mongodb.net/?retryWrites=true&w=majority`;
-
 const PORT = 3000;
 const app = express();
 
-// Middlewares
+// Middlewares 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
