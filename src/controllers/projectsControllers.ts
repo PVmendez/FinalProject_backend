@@ -4,7 +4,7 @@ const projectsController = {
   getProjects: async (req: any, res: any) => {
     try {
       const projects = await Project.find();
-      const projectsData = projects.map((project) => {
+      let projectsData = projects.map((project) => {
         let highCount = 0;
         let mediumCount = 0;
 
@@ -22,6 +22,16 @@ const projectsController = {
           date: project.scan_date,
           levels: { high: highCount, medium: mediumCount },
         };
+      });
+
+      const order: { [key: string]: number } = {
+        High: 0,
+        Medium: 1,
+        Low: 2
+      };
+      
+      projectsData = projectsData.sort((a: any, b: any) => {
+        return order[a.risk_level] - order[b.risk_level];
       });
 
       res.json(projectsData);
