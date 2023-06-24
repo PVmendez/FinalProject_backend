@@ -7,7 +7,6 @@ projectsRouter.get("/projects", async (req, res) => {
 
   try {
     const projects = await Project.find();
-
     const projectsData = projects.map((project) => {
 
       let highCount = 0;
@@ -15,13 +14,9 @@ projectsRouter.get("/projects", async (req, res) => {
 
       project.vulnerability_list.forEach((vulnerability) => {
         if (vulnerability.risk === "High") {
-          if (vulnerability.total) {
-            highCount += vulnerability.total;
-          }
+          if (vulnerability.total) highCount += vulnerability.total;
         } else if (vulnerability.risk === "Medium") {
-          if (vulnerability.total) {
-            mediumCount += vulnerability.total;
-          }
+          if (vulnerability.total) mediumCount += vulnerability.total;
         }
       });
     
