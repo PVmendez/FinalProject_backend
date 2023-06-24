@@ -27,12 +27,9 @@ const engineController = {
           })
         });
         return {
-          sastEngine: "SAST",
-          sastTotal: sastCount,
-          scaEngine: "SCA",
-          scaTotal: scaCount,
-          iacEngine: "IaC",
-          iacTotal: iacCount,
+          SAST: sastCount,
+          SCA: scaCount,
+          IaC: iacCount,
         };
       });
 
