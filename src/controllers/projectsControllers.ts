@@ -34,8 +34,6 @@ const projectsController = {
         return order[a.risk_level] - order[b.risk_level];
       });
 
-      console.log(projectsData);
-
       res.json(projectsData);
     } catch (error) {
       console.log(error);
