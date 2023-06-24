@@ -33,8 +33,6 @@ projectsRouter.get("/projects", async (req, res) => {
       };
     });
 
-    console.log(projectsData);
-
     res.json(projectsData);
   } catch (error) {
     console.log(error);
