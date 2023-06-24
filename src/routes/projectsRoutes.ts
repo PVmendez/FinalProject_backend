@@ -1,17 +1,8 @@
 import express from "express";
-import Project from "../models/projectModel";
+import projectsController from "../controllers/projectsControllers";
 
 const projectsRouter = express.Router();
 
-projectsRouter.get("/projects", async (req, res) => {
-  try {
-    const projects = await Project.find();
-    console.log(projects)
-    res.json(projects);
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: "Error getting the projects" });
-  }
-});
+projectsRouter.get("/projects", projectsController.getProjects);
 
 export default projectsRouter;
