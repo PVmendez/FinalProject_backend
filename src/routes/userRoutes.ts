@@ -1,15 +1,7 @@
 import express from "express";
-import User from "../models/userModel";
+import userController from "../controllers/userController";
 const userRouter = express.Router();
 
-userRouter.get("/users", async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: "Error getting the projects" });
-  }
-});
+userRouter.get("/users", userController.getUsers);
 
 export default userRouter;
