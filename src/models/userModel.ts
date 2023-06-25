@@ -4,12 +4,20 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true
+    required: true,
+    minlength: 4,
+    maxlength: 20
   },
   email: {
     type: String,
+    validate: {
+      validator: async function (email: string) {
+        const car = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        return car.test(email);
+      },
+    },
     required: true,
-    unique: true
+    unique: true,
   },
   full_name: {
     type: String,
