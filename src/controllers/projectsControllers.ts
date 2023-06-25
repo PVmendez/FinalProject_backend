@@ -1,10 +1,15 @@
-import { RiskLevelOrder } from './../interfaces/riskLevelInterfce';
+import { RiskLevelOrder } from "../interfaces/riskLevel";
+import { FilteredList } from "../interfaces/vulnerabilitites";
 import Project from "../models/projectModel";
 
 const projectsController = {
   getProjects: async (req: any, res: any) => {
     try {
+
+      // Get all projects
       const projects = await Project.find();
+
+      // Get the correct format and count risk levels
       let projectsData = projects.map((project) => {
         let highCount = 0;
         let mediumCount = 0;
@@ -25,11 +30,11 @@ const projectsController = {
         };
       });
 
+      // Order by risk levels
       const order: { [key: string]: number } = {
         High: 0,
         Medium: 1,
         Low: 2,
-        Unknown: 3,
       };
 
       projectsData = projectsData.sort((a: any, b: any) => {
@@ -44,19 +49,41 @@ const projectsController = {
   },
   getVulnerabilities: async (req: any, res: any) => {
     try {
+      // Get all projects
       const projects = await Project.find();
+
+      // Get projects vulnerabilities
       let vulnerabilityList = projects.flatMap(
         (project) => project.vulnerability_list
       );
 
+      // Filter by same name
+      const filteredList: FilteredList[] = [];
+
+      vulnerabilityList.forEach((obj: any) => {
+        const existingObjIndex = filteredList.findIndex(
+          (item) => item.name === obj.name
+        );
+        if (existingObjIndex !== -1) {
+          const total = obj.total ?? 0;
+          filteredList[existingObjIndex].total += total;
+        } else {
+          filteredList.push({
+            risk: obj.risk,
+            name: obj.name,
+            total: obj.total ?? 0,
+          });
+        }
+      });
+
+      // Order by risk levels
       const riskLevelOrder: RiskLevelOrder = {
         High: 0,
         Medium: 1,
         Low: 2,
-        Unknown: 3,
       };
 
-      vulnerabilityList.sort((a: any, b: any) => {
+      filteredList.sort((a: any, b: any) => {
         if (
           riskLevelOrder.hasOwnProperty(a.risk) &&
           riskLevelOrder.hasOwnProperty(b.risk)
@@ -66,8 +93,7 @@ const projectsController = {
         return 0;
       });
 
-      console.log(vulnerabilityList);
-      res.json(vulnerabilityList);
+      res.json(filteredList);
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Error getting the vulnerabilities" });
