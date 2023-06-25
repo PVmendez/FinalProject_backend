@@ -4,34 +4,36 @@ const engineController = {
   getEngines: async (req: any, res: any) => {
     try {
       const projects = await Project.find();
-      const engineData = projects.map((project) => {
-        let sastCount = 0;
-        let scaCount = 0;
-        let iacCount = 0;
-        
-        projects.forEach((project) => {
-          project.sast_results.forEach((engine) => {
-            if (engine.risk === "High" || engine.risk === "Medium") {
-              if (engine.count) sastCount += engine.count
-            }
-          })
-          project.sca_results.forEach((engine) => {
-            if (engine.risk === "High" || engine.risk === "Medium") {
-              if (engine.count) scaCount += engine.count
-            }
-          })
-          project.iac_results.forEach((engine) => {
-            if (engine.risk === "High" || engine.risk === "Medium") {
-              if (engine.count) iacCount += engine.count
-            }
-          })
+  
+      let sastCount = 0;
+      let scaCount = 0;
+      let iacCount = 0;
+  
+      projects.forEach((project) => {
+        project.sast_results.forEach((engine) => {
+          if ((engine.risk === "High" || engine.risk === "Medium") && engine.count) {
+            sastCount += engine.count;
+          }
         });
-        return {
-          SAST: sastCount,
-          SCA: scaCount,
-          IaC: iacCount,
-        };
+  
+        project.sca_results.forEach((engine) => {
+          if ((engine.risk === "High" || engine.risk === "Medium") && engine.count) {
+            scaCount += engine.count;
+          }
+        });
+  
+        project.iac_results.forEach((engine) => {
+          if ((engine.risk === "High" || engine.risk === "Medium") && engine.count) {
+            iacCount += engine.count;
+          }
+        });
       });
+  
+      const engineData = {
+        SAST: sastCount,
+        SCA: scaCount,
+        IaC: iacCount,
+      };
 
       res.json(engineData);
     } catch (error) {
