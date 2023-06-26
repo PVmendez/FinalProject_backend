@@ -31,7 +31,7 @@ const userController = {
           expiresIn: '24h'
         });
       
-        res.status(201).json({ token: jwtBearerToken })
+        res.status(200).json({ token: jwtBearerToken })
       } else {
         res.status(401).json({ message: 'Unauthorized' }); 
       }
