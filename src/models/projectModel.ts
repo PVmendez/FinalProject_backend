@@ -24,15 +24,30 @@ const projectSchema = new mongoose.Schema({
     required: true,
   },
   sast_results: {
-    type: [Results],
+    type: [
+      {
+        risk: String,
+        count: Number,
+      }
+    ],
     required: true,
   },
   sca_results: {
-    type: [Results],
+    type: [
+      {
+        risk: String,
+        count: Number,
+      }
+    ],
     required: true,
   },
   iac_results: {
-    type: [Results],
+    type: [
+      {
+        risk: String,
+        count: Number,
+      }
+    ],
     required: true,
   },
   vulnerability_list: {
