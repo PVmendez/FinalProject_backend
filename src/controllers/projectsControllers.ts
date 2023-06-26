@@ -30,6 +30,46 @@ const projectsController = {
       res.status(500).json({ error: "Error getting the projects" });
     }
   },
+
+  getEngines: async (req: any, res: any) => {
+    try {
+      const projects = await Project.find();
+
+      let sastCount = 0;
+      let scaCount = 0;
+      let iacCount = 0;
+
+      function getEngineCount(results: any, counter: number, engine: string) {
+        results.forEach((engine: any) => {
+          if (
+            (engine.risk === "High" || engine.risk === "Medium") &&
+            engine.count
+          ) {
+            counter += engine.count;
+          }
+        });
+        if (engine === "SAST") sastCount = counter;
+        if (engine === "SCA") scaCount = counter;
+        if (engine === "IaC") iacCount = counter;
+      }
+      projects.forEach((project) => {
+        getEngineCount(project.sast_results, sastCount, "SAST");
+        getEngineCount(project.sca_results, scaCount, "SCA");
+        getEngineCount(project.iac_results, iacCount, "IaC");
+      });
+
+      const engineData = {
+        SAST: sastCount,
+        SCA: scaCount,
+        IaC: iacCount,
+      };
+
+      res.json(engineData);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Error getting the projects" });
+    }
+  },
 };
 
 export default projectsController;
