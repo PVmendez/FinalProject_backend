@@ -6,5 +6,7 @@ userRouter.get("/users", userController.getUsers);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/register', userController.registerUser);
 userRouter.get('/user', userController.getUserByEmail);
+userRouter.post('/reset', userController.resetPassword);
+
 
 export default userRouter;
