@@ -10,18 +10,32 @@ const userController = {
       res.status(500).json({ error: "Error getting the projects" });
     }
   },
-  getUserByEmail: async (req: any, res: any, email: String) => {
+  getUserByEmail: async (req: any, res: any) => {
     try {
+      const token = req.headers.authorization;
+      
+      const decodedToken: any = await new Promise((resolve, reject) => {
+        jwt.verify(token, process.env.SECRET_KEY!, (err:any, decoded:any) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(decoded);
+          }
+        });
+      });
+
+      const email = decodedToken.email;
       const user = await User.findOne({ email: email });
-      return user;
+      
+      return res.json(user);
+
     } catch (error) {
       console.log(error);
-      return res.status(404).json({ message: 'Error getting the users' });
+      return res.status(404).json({ message: 'Error getting the user' });
     }
   },
   loginUser: async (req: any, res: any) => {
     const { email, password } = req.body;
-  
     const user = await User.findOne({ email: email });
     
     if (user) {
