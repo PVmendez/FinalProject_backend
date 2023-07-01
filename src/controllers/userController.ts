@@ -59,7 +59,7 @@ const userController = {
     try {
       const user = await User.findOne({ email: email });
   
-      if(user) { return res.status(409).send("User with this email already exists") }
+      if(user) { return res.status(409).json({message:"User with this email already exists"}) }
   
       const newUser = new User({
         email: email,
@@ -70,9 +70,10 @@ const userController = {
   
       await newUser.save();
   
-      res.status(201).send('User created succesfully');
-    } catch {
-      res.status(500).send('Error trying to create user');
+      res.status(201).json({message:'User created'})
+    } catch(error) {
+      console.error(error);
+      res.status(500).json({message:'Error trying to create users'});
     }
   },
 
@@ -96,7 +97,5 @@ const userController = {
     }
   },
 };
-
-
 
 export default userController;
