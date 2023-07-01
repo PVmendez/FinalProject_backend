@@ -77,27 +77,19 @@ const userController = {
   },
 
   resetPassword: async (req:any, res:any) => {
-    const { email, newPassword } = req.body;
-  
+    const { email, password, newPassword } = req.body;
     try {
       const user = await User.findOne({ email: email });
       console.log(user)
       if (user) {
+        if (user.password == password) {
         user.password = newPassword;
         await user.save();
         res.status(200).json({ message: 'Password reset successfully' });
-
-      }
+      }}
       else {
-
         return res.status(404).json({ message: 'User Not Found' });
-
-
       }
-      
-
-  
-      
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: 'Error resetting password' });
