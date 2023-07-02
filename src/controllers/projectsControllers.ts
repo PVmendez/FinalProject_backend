@@ -5,10 +5,8 @@ import Project from "../models/projectModel";
 const projectsController = {
   getProjects: async (req: any, res: any) => {
     try {
-
       // Get all projects
       const projects = await Project.find();
-
       // Get the correct format and count risk levels
       let projectsData = projects.map((project) => {
         let highCount = 0;
