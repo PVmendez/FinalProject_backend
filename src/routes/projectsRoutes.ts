@@ -4,8 +4,10 @@ import verifyToken from "../middlewares/verifyToken";
 
 const projectsRouter = express.Router();
 
-projectsRouter.get("/projects", verifyToken, projectsController.getProjects);
-projectsRouter.get("/engines", verifyToken, projectsController.getEngines);
-projectsRouter.get("/vulnerabilities",verifyToken, projectsController.getVulnerabilities);
+
+projectsRouter.get("/projects", projectsController.getProjects);
+projectsRouter.get("/engines", projectsController.getEngines);
+projectsRouter.get("/vulnerabilities", projectsController.getVulnerabilities);
+projectsRouter.get("/thisweek", projectsController.getThisWeek);
 
 export default projectsRouter;

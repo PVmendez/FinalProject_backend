@@ -136,6 +136,51 @@ const projectsController = {
       res.status(500).json({ error: "Error getting the vulnerabilities" });
     }
   },
+
+  getThisWeek: async (req: any, res: any) => {
+    try {
+      const projects = await Project.find()
+      
+      const weeklyMap: Map<string, number>  = new Map();
+    
+      function getEachDayCount(results: any, weekday: string) {
+        let counter = 0;
+        results.forEach((results: any) => {
+          if(
+            (results.risk === 'High' || results.risk === 'Medium') &&
+            results.count
+          ){
+            counter += results.count;
+          }
+        });
+
+        if (weeklyMap.has(weekday)) {
+          counter += weeklyMap.get(weekday)!;
+        }
+
+        weeklyMap.set(weekday, counter);
+      }
+
+      projects.forEach((project) => {
+          getEachDayCount(project.results_total, project.weekday);
+        });
+      
+      const thisWeekData = {
+        monday: weeklyMap.get("Monday"),
+        tuesday: weeklyMap.get("Tuesday"),
+        wednesday: weeklyMap.get("Wednesday"),
+        thursday: weeklyMap.get("Thursday"),
+        friday: weeklyMap.get("Friday"),
+        saturday: weeklyMap.get("Saturday"),
+        sunday: weeklyMap.get("Sunday"),
+      };
+
+      res.status(200).json(thisWeekData);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json( { error: "Error getting the projects" });
+    }
+  }
 };
 
 export default projectsController;
