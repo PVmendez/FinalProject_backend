@@ -138,6 +138,62 @@ const projectsController = {
       res.status(500).json({ error: "Error getting the vulnerabilities" });
     }
   },
+
+  getThisWeek: async (req: any, res: any) => {
+    try {
+      // Get all projects
+      const projects = await Project.find()
+      let mondayCount = 0;
+      let tuesdayCount = 0;
+      let wednesdayCount = 0;
+      let thursdayCount = 0;
+      let fridayCount = 0;
+      let saturdayCount = 0;
+      let sundayCount = 0;
+    
+      function getEachDayCount(results: any, counter: number, weekday: string,) {
+        results.forEach((results_total: any) => {
+          if(
+            (results_total.results.risk === 'High' || results_total.results.risk === 'Medium') &&
+            results_total.results.count
+          ){
+            counter += results_total.results.count;
+          }
+        });
+        if (weekday === "Monday") mondayCount = counter;
+        if (weekday === "Tuesday") tuesdayCount = counter;
+        if (weekday === "Wednesday") wednesdayCount = counter;
+        if (weekday === "Thursday") thursdayCount = counter;
+        if (weekday === "Friday") fridayCount = counter;
+        if (weekday === "Saturday") saturdayCount = counter;
+        if (weekday === "Sunday") sundayCount = counter;
+
+        projects.forEach((project) => {
+          getEachDayCount(project.results_total, mondayCount, "Monday");
+          getEachDayCount(project.results_total, tuesdayCount, "Tuesday");
+          getEachDayCount(project.results_total, wednesdayCount, "Wednesday");
+          getEachDayCount(project.results_total, thursdayCount, "Thursday");
+          getEachDayCount(project.results_total, fridayCount, "Friday");
+          getEachDayCount(project.results_total, saturdayCount, "Saturday");
+          getEachDayCount(project.results_total, sundayCount, "Sunday");
+        });
+      
+      const thisWeekData = {
+        monday: mondayCount,
+        tuesday: tuesdayCount,
+        wednesday: wednesdayCount,
+        thursday: thursdayCount,
+        friday: fridayCount,
+        saturday: saturdayCount,
+        sunday: sundayCount,
+      };
+
+      res.json(thisWeekData);
+    }} catch (error) {
+      console.log(error);
+      res.status(500).json( { error: "Error getting the projects" });
+    }
+  }
 };
 
 export default projectsController;

@@ -60,6 +60,10 @@ const projectSchema = new mongoose.Schema({
     ],
     required: true,
   },
+  weekday: {
+    type: String,
+    required: true,
+  }
 });
 
 // Create "Project" model
