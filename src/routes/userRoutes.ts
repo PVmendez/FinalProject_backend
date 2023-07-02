@@ -8,5 +8,6 @@ userRouter.get("/users", userController.getUsers);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/register', userController.registerUser);
 userRouter.get('/user', verifyToken, userController.getUserByEmail);
+userRouter.patch('/reset', userController.resetPassword);
 
 export default userRouter;
