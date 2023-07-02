@@ -34,7 +34,7 @@ const userController = {
       
         res.status(200).json({ token: jwtBearerToken })
       } else {
-        res.status(401).json({ message: 'Unauthorized' }); 
+        res.status(401).json({ message: 'Password wrong' }); 
       }
     } else {
       return res.status(404).json({ message: 'User Not Found' });
@@ -58,26 +58,48 @@ const userController = {
       res.status(500).json({message:'Error trying to create users'});
     }
   },
-
-  resetPassword: async (req: any, res: any) => {
-    const { email, password, newPassword } = req.body;
+  updateUser: async (req: any, res: any) => {
+    const { full_name, password, username, photo } = req.body;
     try {
-      const user = await User.findOne({ email: email });
+      const user = await User.findOne({ email: req.user.email });
       if (user) {
-        if (user.password === password) {
-          user.password = newPassword;
+        let updated = false;
+        
+        if (user.full_name !== full_name) {
+          user.full_name = full_name;
+          updated = true;
+        }
+  
+        if (user.username !== username) {
+          user.username = username;
+          updated = true;
+        }
+  
+        if (user.password !== password) {
+          user.password = password;
+          updated = true;
+        }
+  
+        if (user.photo !== photo) {
+          user.photo = photo;
+          updated = true;
+        }
+  
+        if (updated) {
           await user.save();
-          return res.status(200).json({ message: 'Password reset successfully' });
+          return res.status(200).json({ message: 'User updated successfully' });
         } else {
-          return res.status(400).json({ message: 'Passwords do not match' });
+          return res.status(400).json({ message: 'No changes detected' });
         }
       } else {
         return res.status(404).json({ message: 'User Not Found' });
       }
     } catch (error) {
-      return res.status(500).json({ message: 'Error resetting password' });
+      console.log(error)
+      return res.status(500).json({ message: 'Error updating user' });
     }
-  },
+  }
+  
 };
 
 export default userController;
