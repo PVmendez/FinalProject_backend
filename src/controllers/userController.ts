@@ -12,19 +12,7 @@ const userController = {
   },
   getUserByEmail: async (req: any, res: any) => {
     try {
-      const token = req.headers.authorization;
-      
-      const decodedToken: any = await new Promise((resolve, reject) => {
-        jwt.verify(token, process.env.SECRET_KEY!, (err:any, decoded:any) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(decoded);
-          }
-        });
-      });
-
-      const email = decodedToken.email;
+      const email = req.user.email;
       const user = await User.findOne({ email: email });
       
       return res.json(user);
