@@ -18,12 +18,12 @@ This application allows you to:
  
 ## Initial Design and Workflow 🎨
 
-Link to [Figma](https://www.figma.com/proto/fVmJDL4qNGh6wq6mL84ub7/SecRadar?type=design&node-id=144-682&scaling=scale-down&page-id=0%3A1) presentation.
-Link to our [Trello Board](https://trello.com/b/2aCoMn0k/finalprojectwd).
+- Link to [Figma](https://www.figma.com/proto/fVmJDL4qNGh6wq6mL84ub7/SecRadar?type=design&node-id=144-682&scaling=scale-down&page-id=0%3A1) presentation.
+- Link to our [Trello Board](https://trello.com/b/2aCoMn0k/finalprojectwd).
 
-## 👾 Technologies
+## Technologies 👾 
 
-Link to [Frontend repo](https://github.com/PVmendez/FinalProject_frontend/)
+Link to [Backend repo](https://github.com/PVmendez/FinalProject_backend/)
 - Npm
 - Angular
 - Typescript
@@ -32,16 +32,17 @@ Link to [Frontend repo](https://github.com/PVmendez/FinalProject_frontend/)
 - NodeJS
 - Express
 
-## How to run.
+## How to run 🏃
 1. Clone backend repo to your pc.
 2. Create the environment variables file based in the env.example file in the repo.
-3. Install dependencies (run the command: npm install) 
+3. Install dependencies (run the command: npm install) .
 4. Whitelist your ip in MongoDB (if you don't have credentials to do it, ask one of the team members to whitelist you).
-5. run the command 'npm run start'
+5. run the command 'npm run start'.
 6. In your terminal, you will see that the backend is listening in port 3000 and the database connection was established.
-7. Clone frontend repo to your pc
-8. Install dependencies (run the command: npm install)
-9. Launch the frontend in your browser (command: ng serve -o)
+7. Clone frontend repo to your pc.
+8. Install dependencies (run the command: npm install).
+9. Launch the frontend in your browser (command: ng serve -o).
+10. Login and use the app. 
 
 ## Credits 💪
 
