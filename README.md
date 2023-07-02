@@ -33,6 +33,7 @@ Link to [Backend repo](https://github.com/PVmendez/FinalProject_backend/)
 - Express
 
 ## How to run 🏃
+
 1. Clone backend repo to your pc.
 2. Create the environment variables file based in the env.example file in the repo.
 3. Install dependencies (run the command: npm install) .
