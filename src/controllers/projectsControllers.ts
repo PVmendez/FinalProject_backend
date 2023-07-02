@@ -5,8 +5,13 @@ import Project from "../models/projectModel";
 const projectsController = {
   getProjects: async (req: any, res: any) => {
     try {
-      // Get all projects
-      const projects = await Project.find();
+      const filterByDateParam = req.query.filterByDate;
+      let filter = {};
+
+      if (filterByDateParam) { filter = { scan_date: filterByDateParam } }
+
+      const projects = await Project.find(filter);
+
       // Get the correct format and count risk levels
       let projectsData = projects.map((project) => {
         let highCount = 0;
@@ -47,7 +52,12 @@ const projectsController = {
   },
   getEngines: async (req: any, res: any) => {
     try {
-      const projects = await Project.find();
+      const filterByDateParam = req.query.filterByDate;
+      let filter = {};
+
+      if (filterByDateParam) { filter = { scan_date: filterByDateParam } }
+
+      const projects = await Project.find(filter);
 
       let sastCount = 0;
       let scaCount = 0;
@@ -66,6 +76,7 @@ const projectsController = {
         if (engine === "SCA") scaCount = counter;
         if (engine === "IaC") iacCount = counter;
       }
+
       projects.forEach((project) => {
         getEngineCount(project.sast_results, sastCount, "SAST");
         getEngineCount(project.sca_results, scaCount, "SCA");
@@ -87,7 +98,12 @@ const projectsController = {
   getVulnerabilities: async (req: any, res: any) => {
     try {
       // Get all projects
-      const projects = await Project.find();
+      const filterByDateParam = req.query.filterByDate;
+      let filter = {};
+
+      if (filterByDateParam) { filter = { scan_date: filterByDateParam } }
+
+      const projects = await Project.find(filter);
 
       // Get projects vulnerabilities
       let vulnerabilityList = projects.flatMap(
@@ -136,7 +152,6 @@ const projectsController = {
       res.status(500).json({ error: "Error getting the vulnerabilities" });
     }
   },
-
   getThisWeek: async (req: any, res: any) => {
     try {
       const projects = await Project.find()
