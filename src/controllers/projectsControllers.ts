@@ -166,13 +166,13 @@ const projectsController = {
         });
       
       const thisWeekData = {
-        monday: weeklyMap.get("Monday"),
-        tuesday: weeklyMap.get("Tuesday"),
-        wednesday: weeklyMap.get("Wednesday"),
-        thursday: weeklyMap.get("Thursday"),
-        friday: weeklyMap.get("Friday"),
-        saturday: weeklyMap.get("Saturday"),
-        sunday: weeklyMap.get("Sunday"),
+        Monday: weeklyMap.get("Monday"),
+        Tuesday: weeklyMap.get("Tuesday"),
+        Wednesday: weeklyMap.get("Wednesday"),
+        Thursday: weeklyMap.get("Thursday"),
+        Friday: weeklyMap.get("Friday"),
+        Saturday: weeklyMap.get("Saturday"),
+        Sunday: weeklyMap.get("Sunday"),
       };
 
       res.status(200).json(thisWeekData);
