@@ -141,55 +141,44 @@ const projectsController = {
 
   getThisWeek: async (req: any, res: any) => {
     try {
-      // Get all projects
       const projects = await Project.find()
-      let mondayCount = 0;
-      let tuesdayCount = 0;
-      let wednesdayCount = 0;
-      let thursdayCount = 0;
-      let fridayCount = 0;
-      let saturdayCount = 0;
-      let sundayCount = 0;
+      
+      const weeklyMap: Map<string, number>  = new Map();
     
-      function getEachDayCount(results: any, counter: number, weekday: string,) {
-        results.forEach((results_total: any) => {
+      function getEachDayCount(results: any, weekday: string) {
+        let counter = 0;
+        results.forEach((results: any) => {
           if(
-            (results_total.results.risk === 'High' || results_total.results.risk === 'Medium') &&
-            results_total.results.count
+            (results.risk === 'High' || results.risk === 'Medium') &&
+            results.count
           ){
-            counter += results_total.results.count;
+            counter += results.count;
           }
         });
-        if (weekday === "Monday") mondayCount = counter;
-        if (weekday === "Tuesday") tuesdayCount = counter;
-        if (weekday === "Wednesday") wednesdayCount = counter;
-        if (weekday === "Thursday") thursdayCount = counter;
-        if (weekday === "Friday") fridayCount = counter;
-        if (weekday === "Saturday") saturdayCount = counter;
-        if (weekday === "Sunday") sundayCount = counter;
 
-        projects.forEach((project) => {
-          getEachDayCount(project.results_total, mondayCount, "Monday");
-          getEachDayCount(project.results_total, tuesdayCount, "Tuesday");
-          getEachDayCount(project.results_total, wednesdayCount, "Wednesday");
-          getEachDayCount(project.results_total, thursdayCount, "Thursday");
-          getEachDayCount(project.results_total, fridayCount, "Friday");
-          getEachDayCount(project.results_total, saturdayCount, "Saturday");
-          getEachDayCount(project.results_total, sundayCount, "Sunday");
+        if (weeklyMap.has(weekday)) {
+          counter += weeklyMap.get(weekday)!;
+        }
+
+        weeklyMap.set(weekday, counter);
+      }
+
+      projects.forEach((project) => {
+          getEachDayCount(project.results_total, project.weekday);
         });
       
       const thisWeekData = {
-        monday: mondayCount,
-        tuesday: tuesdayCount,
-        wednesday: wednesdayCount,
-        thursday: thursdayCount,
-        friday: fridayCount,
-        saturday: saturdayCount,
-        sunday: sundayCount,
+        monday: weeklyMap.get("Monday"),
+        tuesday: weeklyMap.get("Tuesday"),
+        wednesday: weeklyMap.get("Wednesday"),
+        thursday: weeklyMap.get("Thursday"),
+        friday: weeklyMap.get("Friday"),
+        saturday: weeklyMap.get("Saturday"),
+        sunday: weeklyMap.get("Sunday"),
       };
 
-      res.json(thisWeekData);
-    }} catch (error) {
+      res.status(200).json(thisWeekData);
+    } catch (error) {
       console.log(error);
       res.status(500).json( { error: "Error getting the projects" });
     }

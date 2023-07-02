@@ -1,10 +1,5 @@
 import mongoose from "mongoose";
 
-const Results = {
-  type: String,
-  count: Number,
-};
-
 // Define the project schema
 const projectSchema = new mongoose.Schema({
   project_name: {
@@ -20,7 +15,12 @@ const projectSchema = new mongoose.Schema({
     required: true,
   },
   results_total: {
-    type: [Results],
+    type: [
+      {
+        risk: String,
+        count: Number,
+      }
+    ],
     required: true,
   },
   sast_results: {
