@@ -5,9 +5,12 @@ import Project from "../models/projectModel";
 const projectsController = {
   getProjects: async (req: any, res: any) => {
     try {
+      const filterByDateParam = req.query.filterByDate;
+      let filter = {};
 
-      // Get all projects
-      const projects = await Project.find();
+      if (filterByDateParam) { filter = { scan_date: filterByDateParam } }
+
+      const projects = await Project.find(filter);
 
       // Get the correct format and count risk levels
       let projectsData = projects.map((project) => {
@@ -49,7 +52,12 @@ const projectsController = {
   },
   getEngines: async (req: any, res: any) => {
     try {
-      const projects = await Project.find();
+      const filterByDateParam = req.query.filterByDate;
+      let filter = {};
+
+      if (filterByDateParam) { filter = { scan_date: filterByDateParam } }
+
+      const projects = await Project.find(filter);
 
       let sastCount = 0;
       let scaCount = 0;
@@ -68,6 +76,7 @@ const projectsController = {
         if (engine === "SCA") scaCount = counter;
         if (engine === "IaC") iacCount = counter;
       }
+
       projects.forEach((project) => {
         getEngineCount(project.sast_results, sastCount, "SAST");
         getEngineCount(project.sca_results, scaCount, "SCA");
@@ -89,7 +98,12 @@ const projectsController = {
   getVulnerabilities: async (req: any, res: any) => {
     try {
       // Get all projects
-      const projects = await Project.find();
+      const filterByDateParam = req.query.filterByDate;
+      let filter = {};
+
+      if (filterByDateParam) { filter = { scan_date: filterByDateParam } }
+
+      const projects = await Project.find(filter);
 
       // Get projects vulnerabilities
       let vulnerabilityList = projects.flatMap(
@@ -138,6 +152,58 @@ const projectsController = {
       res.status(500).json({ error: "Error getting the vulnerabilities" });
     }
   },
+  getThisWeek: async (req: any, res: any) => {
+    try {
+      const projects = await Project.find()
+      
+      const weeklyMap: Map<string, number>  = new Map([
+        ["Monday",0],
+        ["Tuesday",0],
+        ["Wednesday",0],
+        ["Thursday",0],
+        ["Friday",0],
+        ["Saturday",0],
+        ["Sunday",0],
+
+      ]);
+    
+      function getEachDayCount(results: any, weekday: string) {
+        let counter = 0;
+        results.forEach((results: any) => {
+          if(
+            (results.risk === 'High' || results.risk === 'Medium') && results.count
+          ){
+            counter += results.count;
+          }
+        });
+
+        if (weeklyMap.has(weekday)) {
+          counter += weeklyMap.get(weekday)!;
+        }
+
+        weeklyMap.set(weekday, counter);
+      }
+
+      projects.forEach((project) => {
+          getEachDayCount(project.results_total, project.weekday);
+        });
+      
+      const thisWeekData = {
+        Monday: weeklyMap.get("Monday"),
+        Tuesday: weeklyMap.get("Tuesday"),
+        Wednesday: weeklyMap.get("Wednesday"),
+        Thursday: weeklyMap.get("Thursday"),
+        Friday: weeklyMap.get("Friday"),
+        Saturday: weeklyMap.get("Saturday"),
+        Sunday: weeklyMap.get("Sunday"),
+      };
+
+      res.status(200).json(thisWeekData);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json( { error: "Error getting the projects" });
+    }
+  }
 };
 
 export default projectsController;
