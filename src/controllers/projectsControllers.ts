@@ -141,14 +141,22 @@ const projectsController = {
     try {
       const projects = await Project.find()
       
-      const weeklyMap: Map<string, number>  = new Map();
+      const weeklyMap: Map<string, number>  = new Map([
+        ["Monday",0],
+        ["Tuesday",0],
+        ["Wednesday",0],
+        ["Thursday",0],
+        ["Friday",0],
+        ["Saturday",0],
+        ["Sunday",0],
+
+      ]);
     
       function getEachDayCount(results: any, weekday: string) {
         let counter = 0;
         results.forEach((results: any) => {
           if(
-            (results.risk === 'High' || results.risk === 'Medium') &&
-            results.count
+            (results.risk === 'High' || results.risk === 'Medium') && results.count
           ){
             counter += results.count;
           }
